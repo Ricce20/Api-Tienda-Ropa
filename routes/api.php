@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+//controllers
+use App\Http\Controllers\UserRegisterController;
+use App\Http\Controllers\AuthController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +16,26 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+//public
+
+Route::post('/register-cliente',[UserRegisterController::class,'UserEndCustomerRegister'])->name('register-customer');
+Route::post('/login',[AuthController::class,'login'])->name('login');
+Route::post('/logout',[AuthController::class,'logout'])->name('logout');
+
+
+//employees
+Route::group(['middleware' => ['auth:sanctum', 'check_user_type:1']], function () {
+    //employees register
+    Route::post('/user-employee-register',[UserRegisterController::class, 'UserEndEmployeeRegister'])->name('register-user-employee');
+    Route::post('/employee-register',[UserRegisterController::class,'RegisterEmployee'])->name('register-employee');
+});
+
+
+//customers
+Route::group(['middleware' => ['auth:sanctum', 'check_user_type:2']], function () {
+
 });

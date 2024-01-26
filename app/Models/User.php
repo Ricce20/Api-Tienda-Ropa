@@ -41,4 +41,29 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $attributes = [
+        'state_id' => '1', // Valor por defecto para state_id
+    ];
+
+    //relaciones 
+    public function state()
+    {
+        return $this->belongsTo(State::class);
+    }
+    
+    public function rol()
+    {
+        return $this->belongsTo(Rol::class);
+    }
+
+    public function employee()
+    {
+    return $this->belongsTo(Employee::class);
+    }
+    
+    public function customer()
+    {
+        return $this->hasOne(Customer::class);
+    }
 }
