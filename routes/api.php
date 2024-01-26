@@ -7,7 +7,8 @@ use App\Http\Controllers\UserRegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SupplierController;
-
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProductEntryController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -38,7 +39,8 @@ Route::group(['middleware' => ['auth:sanctum', 'check_user_type:1']], function (
     //gestion products
     Route::apiResource('/categories', CategoryController::class);
     Route::apiResource('/suppliers', SupplierController::class);
-
+    Route::apiResource('/products', ProductController::class);
+    Route::apiResource('/entries',ProductEntryController::class);
 });
 
 
