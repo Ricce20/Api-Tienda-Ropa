@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 //controllers
 use App\Http\Controllers\UserRegisterController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SupplierController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -32,6 +35,10 @@ Route::group(['middleware' => ['auth:sanctum', 'check_user_type:1']], function (
     //employees register
     Route::post('/user-employee-register',[UserRegisterController::class, 'UserEndEmployeeRegister'])->name('register-user-employee');
     Route::post('/employee-register',[UserRegisterController::class,'RegisterEmployee'])->name('register-employee');
+    //gestion products
+    Route::apiResource('/categories', CategoryController::class);
+    Route::apiResource('/suppliers', SupplierController::class);
+
 });
 
 

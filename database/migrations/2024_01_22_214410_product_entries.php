@@ -15,17 +15,19 @@ return new class extends Migration
     {
         Schema::create('product_entries', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('product_id');
-            $table->bigInteger('supplier_id');
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('supplier_id');
             $table->integer('quantity');
-            $table->dateTime('entry_data')->default(new DateTime());
+            $table->decimal('unit_price');
+            $table->decimal('total');
+            $table->dateTime('entry_date');
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')->onUpdate('cascade')->onDelete('restrict');
             $table->foreign('supplier_id')->references('id')->on('suppliers')->onUpdate('cascade')->onDelete('restrict');
-
         });
     }
+
 
     /**
      * Reverse the migrations.
