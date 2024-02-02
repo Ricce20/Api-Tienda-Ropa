@@ -4,7 +4,9 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Http\JsonResponse;
 class Handler extends ExceptionHandler
 {
     /**
@@ -46,5 +48,18 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $e)
+    {
+        if ($e instanceof AuthenticationException) {
+            return response()->json(['message' => 'No estás autenticado. Por favor, inicia sesión para continuar.'], 401);
+        }
+
+        if ($e instanceof MethodNotAllowedHttpException) {
+            return response()->json(['message' => 'Método no permitido para este endpoint.'], 405);
+        }
+
+        return parent::render($request, $e);
     }
 }

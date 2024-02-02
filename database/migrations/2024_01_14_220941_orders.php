@@ -19,6 +19,9 @@ return new class extends Migration
             $table->dateTime('orderDate');
             $table->decimal('total',10,2);
             $table->unsignedBigInteger('state_id');
+            $table->String('No_transaccion')->nullable();
+            $table->String('paqueteria')->nullable();
+            $table->String('numero_guia')->nullable();
 
             
             $table->timestamps();

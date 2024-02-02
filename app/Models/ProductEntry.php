@@ -16,9 +16,10 @@ class ProductEntry extends Model
         'supplier_id',
         'quantity',
         'unit_price',
-        'total'
+        'total',
+        'entry_data'
     ];
-
+    
     public function product()
     {
         return $this->belongsTo(Product::class,'product_id');

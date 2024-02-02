@@ -135,22 +135,25 @@ class ProductController extends Controller
     public function show($id)
     {
         try {
-            $product = Product::where('id',$id)->where('state_id','1')->with('supplier','category')->first();
-            $product->image1=asset('/storage/'.$product->image1);
-            $product->image2=asset('/storage/'.$product->image2);
-            $product->image3=asset('/storage/'.$product->image3);
+            $product = Product::where('id', $id)->where('state_id', '1')->with('supplier', 'category')->first();
 
-            return $product
-            ? response()->json(['product'=>$product],200)
-            : response()->json(['none'=> 'elemento no encontrado'],404);
-            
+            if (!$product) {
+                return response()->json(['message' => 'Elemento no encontrado'], 404);
+            }
+
+            $product->image1 = asset('/storage/' . $product->image1);
+            $product->image2 = asset('/storage/' . $product->image2);
+            $product->image3 = asset('/storage/' . $product->image3);
+
+            return response()->json(['product' => $product], 200);
 
         } catch (\Exception $e) {
             return response()->json([
-                'error'=>$e->getMessage()
-            ],500);
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -246,7 +249,7 @@ class ProductController extends Controller
             $product->state_id = 2;
             $product->save();
             return response()->json([
-                'productDeleted'=>$product
+                'message'=>'Producto eliminado correctamente'
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

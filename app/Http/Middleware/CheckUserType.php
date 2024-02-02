@@ -26,6 +26,11 @@ class CheckUserType
             }
         }
 
+        if(!Auth::check()){
+            return response()->json(['error' => 'Acceso no autorizado'], 403);
+
+        }
+
         // Redireccionar o devolver un error según tus necesidades
         return response()->json(['error' => 'Acceso no autorizado'], 403);
     }

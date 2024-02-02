@@ -72,7 +72,7 @@ class UserRegisterController extends Controller
                 'name' => 'required|string|max:100',
                 'lastname' => 'required|string|max:100',
                 'address' => 'nullable|string',
-                'phone' => 'required|string|max:10',
+                'phone' => 'required|string|max:10|unique:employees,phone',
                 'puesto' => 'required|string',
                 'email' => 'required|string|unique:users,email',
                 'password' => 'required|string|min:8',
@@ -126,6 +126,81 @@ class UserRegisterController extends Controller
         }
         
     }
+
+    public function editEmpleyee(Request $request,$id){
+        try {
+            // Validation
+            Validator::make($request->all(), [
+                'name' => 'nullable|string|max:100',
+                'lastname' => 'nullable|string|max:100',
+                'address' => 'nullable|string',
+                'phone' => 'nullable|string|max:10|unique:employees,phone,'.$id,
+                'puesto' => 'nullable|string',
+                
+            ])->validate();
+
+            $employee = Employee::where('id',$id)->first();
+            $employee->name = $request->name;
+            $employee->lastname = $request->lastname;
+            $employee->address = $request->address;
+            $employee->phone = $request->phone;
+            $employee->puesto = $request->puesto;
+            $employee->save();
+
+            //cargamos las imagenes 
+            if($request->hasfile('photo')){
+                $photo = $request->file('photo');
+                //$path = image->path();
+                $extension =  $photo->extension();
+                $new_name = $employee->id."-1.".$extension;
+                $path = $photo->storeAs('images/employees', $new_name ,'public');
+                //$product->image->$new_name;
+                $employee->photo = $path;
+                $employee->save();
+            }
+            return response()->json(['message'=>'empleado actualizado correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+
+    public function deleteEmployee($id){
+        try {
+            $employee = Employee::where('id',$id)->first();
+            if(!$employee){
+                return response()->json(['message' =>'Empleado ya ha sido eliminado'], 404);
+
+            }
+            $employee->delete();
+
+            return response()->json(['message' =>'Empleado eliminado correctamente'], 200);
+        }catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function enableUser($id){
+        try {
+            $user = User::where('id', $id)->first();
+            if (!$user) {
+                return response()->json(['message' => 'Usuario no encontrado'], 404);
+            }
+            $user->state_id = '2';
+            $user->save();
+    
+            return response()->json(['message' => 'Usuario Eliminado correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+    
 
     //Register to the Customers- tables users end customers
     public function UserEndCustomerRegister(Request $request){
