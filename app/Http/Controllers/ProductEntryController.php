@@ -18,7 +18,7 @@ class ProductEntryController extends Controller
     public function index()
     {
         try {
-            $entries = ProductEntry::select('product_id','supplier_id','quantity','unit_price','total','entry_date')->with('product', 'supplier')->get();
+            $entries = ProductEntry::select('id','product_id','supplier_id','quantity','unit_price','total','entry_date')->with('product', 'supplier')->get();
             return response()->json(['entries' => $entries], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error encontrado: ' . $e->getMessage()], 500);

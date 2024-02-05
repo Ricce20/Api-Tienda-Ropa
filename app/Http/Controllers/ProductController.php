@@ -229,9 +229,16 @@ class ProductController extends Controller
                 'message'=>'Producto Actualizado Correctamente'
             ], 200);
 
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Obtener el primer error de validación para un campo específico
+            $fieldError = $e->errors()[array_key_first($e->errors())][0];
+    
+            return response()->json([
+                'errorValidate' => $fieldError
+            ], 422);
         } catch (\Exception $e) {
             return response()->json([
-                'error'=>$e->getMessage()
+                'error' => $e->getMessage()
             ],500);
         }
     }
